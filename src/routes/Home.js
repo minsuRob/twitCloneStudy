@@ -7,16 +7,16 @@ const Home = () => {
 
     const getNweets = async () => {
         const dbNweets = await dbService.collection("nweets").get();
-        dbNweets.forEach((dbNweet) =>
-                setNweets((prev) => [dbNweet.data(), ...prev])
-            )
+        dbNweets.forEach((dbNweet) => {
+            const nweetObject = { ...dbNweet.data(), id: dbNweet.id};
+                setNweets((prev) => [nweetObject, ...prev])
+        })
     }
 
     useEffect(() => {
         getNweets();
     }, []);
 
-    console.log(nweets);
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -36,16 +36,25 @@ const Home = () => {
     }
 
     return (
+      <>
         <form onSubmit={onSubmit}>
         <input
-          value={nweet}
-          onChange={onChange}
-          type="text"
-          placeholder="What's on your mind?"
-          maxLength={120}
+        value={nweet}
+        onChange={onChange}
+        type="text"
+        placeholder="What's on your mind?"
+        maxLength={120}
         />
         <input type="submit" value="Nweet" />
-      </form>
+        </form>
+        <div>
+            {nweets.map((nweet) =>(
+                <div key={nweet.id}>
+                    <h4>{nweet.text}</h4>
+                </div>
+            ))}
+        </div>
+      </>
     )
 }
 
