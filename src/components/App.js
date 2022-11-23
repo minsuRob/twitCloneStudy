@@ -7,6 +7,11 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   const [userObj, setUserObj] = useState(null);
 
+
+  const refreshUser = () => {
+    setUserObj(authService.currentUser);
+  }
+
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
@@ -22,7 +27,7 @@ function App() {
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} />
+        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} refreshUser={refreshUser}/>
       ) : (
         "initializing..."
       )}
